@@ -21,3 +21,15 @@ val input = sc.textFile("README.md")
 val words = input.flatMap(line => line.split(" "))
 // Transform into pairs and count.
 val counts = words.map(word => (word, 1)).reduceByKey{case (x, y) => x + y}
+
+// parallelize
+val lines = sc.parallelize(List("pandas", "i like pandas"))
+
+// filter
+val inputRDD = sc.textFile("log.txt")
+val errorsRDD = inputRDD.filter(line => line.contains("error"))
+
+// take - collects number of elements from RDD
+println("Input had " + badLinesRDD.count() + " concerning lines")
+println("Here are 10 examples:")
+badLinesRDD.take(10).foreach(println) 
