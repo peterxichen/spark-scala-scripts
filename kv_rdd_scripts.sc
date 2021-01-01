@@ -22,3 +22,4 @@ result.collectAsMap().map(println(_))
 val data = Seq(("a", 3), ("b", 4), ("a", 1))
 sc.parallelize(data).reduceByKey((x, y) => x + y)
 sc.parallelize(data).reduceByKey((x, y) => x + y, 10)
+
