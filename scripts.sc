@@ -33,3 +33,13 @@ val errorsRDD = inputRDD.filter(line => line.contains("error"))
 println("Input had " + badLinesRDD.count() + " concerning lines")
 println("Here are 10 examples:")
 badLinesRDD.take(10).foreach(println) 
+
+// squaring values
+val input = sc.parallelize(List(1, 2, 3, 4))
+val result = input.map(x => x * x)
+println(result.collect().mkString(","))
+
+// flatMap
+val lines = sc.parallelize(List("hello world", "hi"))
+val words = lines.flatMap(line => line.split(" "))
+words.collect().foreach(println)
