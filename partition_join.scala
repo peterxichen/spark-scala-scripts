@@ -7,7 +7,7 @@
 val sc = new SparkContext(...)
 val userData = sc.sequenceFile[UserID, UserInfo]("hdfs://...").persist()
 
-// userData is hash-partitioned (only events will be shuffled)
+// userData has known hash-partition (only events will be shuffled)
 val sc = new SparkContext(...)
 val userData = sc.sequenceFile[UserID, UserInfo]("hdfs://...")
                  .partitionBy(new HashPartitioner(100)) // Create 100 partitions

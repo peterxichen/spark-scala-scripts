@@ -23,3 +23,9 @@ val data = Seq(("a", 3), ("b", 4), ("a", 1))
 sc.parallelize(data).reduceByKey((x, y) => x + y)
 sc.parallelize(data).reduceByKey((x, y) => x + y, 10)
 
+// partition information
+val pairs = sc.parallelize(List((1, 1), (2, 2), (3, 3)))
+pairs.partitioner
+// add persist to use partition information in future operations
+val partitioned = pairs.partitionBy(new spark.HashPartitioner(2))
+partitioned.partitioner
