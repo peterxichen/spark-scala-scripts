@@ -49,3 +49,16 @@ pandaLovers.map(person => List(person.name, person.favoriteAnimal).toArray)
 // SequenceFile
 val data = sc.sequenceFile(inFile, classOf[Text], classOf[InWritable]).
             map{case (x, y) => (x.toString, y.get())}
+// saving SequenceFile
+val data = sc.parallelize(List(("Panda", 3), ("Kay", 6), ("Snail", 2)))
+data.saveAsSequenceFile(outputFile)
+
+// KeyValueTextInputFormat()
+val input = sc.hadoopFile[Text, Text, KeyValueTextInputFormat](inputFile).map{
+case (x, y) => (x.toString, y.toString)
+}
+
+// LZO-compressed JSON
+val input = sc.newAPIHadoopFile(inputFile, classOf[LzoJsonInputFormat],
+    classOf[LongWritable], classOf[MapWritable], conf)
+)
