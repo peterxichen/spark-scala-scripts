@@ -118,3 +118,25 @@ val currentTweets = sc.hadoopRDD(jobConf,
 // Extract only the map
 // Convert the MapWritable[Text, Text] to Map[String, String]
 val tweets = currentTweets.map{ case (key, value) => mapWritableToInput(value) }
+
+// per-partition map and foreach
+val tempLists = validSigns.distinct().mapPartitions{
+    signs =>
+    val mapper = createMapper()
+    val client = new HttpClient()
+    client.start()
+    signs.map {sign =>
+        createExchangeForSign(sign)
+    }.map{ case (sign, exchange) =>
+        (sign, readExchangeCallLog(mapper, exchange))
+    }.filter(x => x._2 != null) // remove empty
+}
+
+// pipe method from R
+val distScript = "./src/R/finddistance.R"
+val distScriptName = "finddistance.R"
+sc.addFile(distScript)
+val distances = contactsContactLists.values.flatMap(x => x.map(y =>
+    s"$y.contactlay,$y.contactlong,$y.mylat,$y.mylong")).pipe(Seq(
+        SparkFiles.get(distScriptName)))
+println(distances.collect().toList)
