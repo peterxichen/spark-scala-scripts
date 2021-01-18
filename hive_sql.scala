@@ -15,3 +15,7 @@ case class HappyPerson(handel: String, favouriteBeverage: String)
 val happyPeopleRDD = sc.parallelize(List(HappyPerson("holden", "coffee")))
 // implicit conversion - sqlCtx.createSchemaRDD(happyPeopleRDD)
 happyPeopleRDD.registertempTable("happy_table")
+
+// UDF for text length
+registerFunction("strlenScala", (_: String).length)
+val tweetLength = hiveCtx.sql("SELECT strLenScala('tweet') FROM tweets LIMIT 10")
